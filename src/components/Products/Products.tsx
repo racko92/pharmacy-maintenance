@@ -7,8 +7,10 @@ import {
   DeleteOutlined,
   FileAddOutlined,
 } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const Products = () => {
+  const navigate = useNavigate();
   const { products } = useProducts();
 
   return (
@@ -16,7 +18,11 @@ const Products = () => {
       size="small"
       header={<h2>Pharmacy Products list</h2>}
       footer={
-        <Button type="primary" icon={<FileAddOutlined />}>
+        <Button
+          type="primary"
+          icon={<FileAddOutlined />}
+          onClick={() => navigate('add')}
+        >
           Add new product
         </Button>
       }

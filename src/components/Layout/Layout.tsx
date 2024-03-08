@@ -7,6 +7,7 @@ import Products from '../Products/Products';
 import About from '../About/About';
 import styles from './Layout.module.scss';
 import ProductsProvider from '../../context/Products.context';
+import ProductsForm from '../Products/ProductsForm/ProductsForm';
 
 const { Header, Content, Footer, Sider } = AntdLayoutComponent;
 
@@ -36,23 +37,19 @@ const Layout = () => {
       </Sider>
       <AntdLayoutComponent>
         <Header />
-        <Content>
-          <Routes>
-            <Route path="/" element={<Outlet />}>
-              <Route
-                path="product"
-                element={
-                  <ProductsProvider>
-                    <Products />
-                  </ProductsProvider>
-                }
-              />
-              <Route path="about" element={<About />} />
+        <ProductsProvider>
+          <Content>
+            <Routes>
+              <Route path="/" element={<Outlet />}>
+                <Route path="product/add" element={<ProductsForm />} />
+                <Route path="product" element={<Products />}></Route>
+                <Route path="about" element={<About />} />
 
-              <Route path="*" element={<>404</>} />
-            </Route>
-          </Routes>
-        </Content>
+                <Route path="*" element={<>404</>} />
+              </Route>
+            </Routes>
+          </Content>
+        </ProductsProvider>
         <Footer className={styles.footer}>
           Vladimir Racković © {new Date().getFullYear()}
         </Footer>

@@ -1,8 +1,11 @@
-import React, { useContext, useState, createContext } from 'react';
+import React, { useContext, useState, createContext, useMemo } from 'react';
+import { v4 } from 'uuid';
 import { IProduct } from '../types/Product.types';
+import { IManufacturer } from '../types/Manufacturer.types';
 
 export type IProductContext = {
   products: IProduct[];
+  manufacturers: IManufacturer[];
   setProducts: React.Dispatch<React.SetStateAction<IProduct[]>>;
 };
 
@@ -25,10 +28,20 @@ const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [products, setProducts] = useState<IProduct[]>([
     {
-      id: '7cab6e02-57dd-45db-bb15-3b8758def3cb',
+      id: v4(),
       name: 'First product',
       manufacturer: {
-        id: '3eca6e18-745e-4be9-bfa3-61214a864ca7',
+        id: '6ac48689-63ac-40c6-89e6-035898a7a8be',
+        name: 'Best manufacturer',
+      },
+      price: 123,
+      expiryDate: new Date(),
+    },
+    {
+      id: v4(),
+      name: 'Second product',
+      manufacturer: {
+        id: '6ac48689-63ac-40c6-89e6-035898a7a8be',
         name: 'Best manufacturer',
       },
       price: 123,
@@ -36,8 +49,23 @@ const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
     },
   ]);
 
+  const manufacturers = useMemo(
+    () =>
+      products.reduce(
+        (acc: IManufacturer[], product: IProduct) =>
+          acc.find(
+            (manufacturer: IManufacturer) =>
+              manufacturer.id === product.manufacturer.id
+          )
+            ? acc
+            : [...acc, product.manufacturer],
+        []
+      ),
+    [products]
+  );
+
   return (
-    <ProductsContext.Provider value={{ products, setProducts }}>
+    <ProductsContext.Provider value={{ products, manufacturers, setProducts }}>
       {children}
     </ProductsContext.Provider>
   );

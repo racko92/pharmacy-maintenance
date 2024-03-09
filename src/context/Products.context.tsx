@@ -2,13 +2,14 @@ import React, { useContext, useState, createContext, useMemo } from 'react';
 import { v4 } from 'uuid';
 import { IProduct } from '../types/Product.types';
 import { IManufacturer } from '../types/Manufacturer.types';
-import dayjs from 'dayjs';
+import { products as MOCKED_PRODUCTS } from '../mocks/Products.mocks';
 
 export type IProductContext = {
   products: IProduct[];
   manufacturers: IManufacturer[];
   addProduct: (product: IProduct) => void;
   editProduct: (product: IProduct) => void;
+  deleteProduct: (product: IProduct) => void;
 };
 
 const ProductsContext = createContext<IProductContext | null>(null);
@@ -28,28 +29,7 @@ export const useProducts = () => {
 const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [products, setProducts] = useState<IProduct[]>([
-    {
-      id: v4(),
-      name: 'First product',
-      manufacturer: {
-        id: '6ac48689-63ac-40c6-89e6-035898a7a8be',
-        name: 'Best manufacturer',
-      },
-      price: 123,
-      expiryDate: dayjs(),
-    },
-    {
-      id: v4(),
-      name: 'Second product',
-      manufacturer: {
-        id: '6ac48689-63ac-40c6-89e6-035898a7a8be',
-        name: 'Best manufacturer',
-      },
-      price: 123,
-      expiryDate: dayjs(),
-    },
-  ]);
+  const [products, setProducts] = useState<IProduct[]>([...MOCKED_PRODUCTS]);
 
   const manufacturers = useMemo(
     () =>
@@ -66,17 +46,20 @@ const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
     [products]
   );
 
-  const addProduct = (product: IProduct) => {
+  const addProduct = (product: IProduct) =>
     setProducts((prevState) => [...prevState, { ...product, id: v4() }]);
-  };
 
-  const editProduct = (product: IProduct) => {
+  const editProduct = (product: IProduct) =>
     setProducts((prevState) =>
       prevState.map((prevProduct) =>
         prevProduct.id === product.id ? product : prevProduct
       )
     );
-  };
+
+  const deleteProduct = (product: IProduct) =>
+    setProducts((prevState) =>
+      prevState.filter((prevProduct) => prevProduct.id !== product.id)
+    );
 
   return (
     <ProductsContext.Provider
@@ -85,6 +68,7 @@ const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
         manufacturers,
         addProduct,
         editProduct,
+        deleteProduct,
       }}
     >
       {children}

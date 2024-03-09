@@ -1,0 +1,23 @@
+.list {
+  :global(.ant-spin-nested-loading) {
+    max-height: calc(100vh - 330px);
+    overflow: auto;
+  }
+}
+
+.itemWrapper {
+  min-width: 20%;
+  text-align: left;
+}
+
+.pastDate {
+  color: red;
+}
+
+.productControls {
+  display: flex;
+  flex-direction: row;
+  button {
+    margin-left: 5px;
+  }
+}

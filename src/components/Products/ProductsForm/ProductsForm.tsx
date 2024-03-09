@@ -11,17 +11,16 @@ import ManufacturerSelectOption from '../../shared/ManufacturerSelectOption/Manu
 import ManufacturerDropdown from '../../shared/ManufacturerDropdown/ManufacturerDropdown';
 import { IProduct, IProductForm } from '../../../types/Product.types';
 import styles from './ProductsForm.module.scss';
+import dayjs from 'dayjs';
 
 const ProductsForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [form] = Form.useForm();
-  const values = Form.useWatch([], form);
   const [manufacturerInput, setManufacturerInput] = React.useState<string>('');
   const [newManufacturer, setNewManufacturer] =
     React.useState<INewManufacturer>();
   const { products, manufacturers, addProduct, editProduct } = useProducts();
-  const [submittable, setSubmittable] = React.useState<boolean>(false);
 
   const manufacturersForSelect = React.useMemo(() => {
     return manufacturers
@@ -87,7 +86,7 @@ const ProductsForm = () => {
       rules: [{ required: true, message: 'Manufacturer is required' }],
       render: (
         <Select
-          className={styles.inputField}
+          className={`${styles.inputField} ${styles.select}`}
           options={manufacturersForSelect}
           optionRender={(option) => (
             <ManufacturerSelectOption
@@ -118,24 +117,23 @@ const ProductsForm = () => {
       label: 'Expiry Date',
       name: 'expiryDate',
       rules: [{ required: true, message: 'Expiry date is required' }],
-      render: <DatePicker className={styles.inputField} format="DD.MM.YYYY" />,
+      render: (
+        <DatePicker
+          className={styles.inputField}
+          format="DD.MM.YYYY"
+          disabledDate={(current) => current < dayjs().endOf('day')}
+        />
+      ),
     },
     {
       name: 'submitButton',
       render: (
-        <Button type="primary" htmlType="submit" disabled={submittable}>
+        <Button type="primary" htmlType="submit">
           Submit
         </Button>
       ),
     },
   ];
-
-  React.useEffect(() => {
-    form
-      .validateFields({ validateOnly: true })
-      .then(() => setSubmittable(true))
-      .catch(() => setSubmittable(false));
-  }, [form, values]);
 
   React.useEffect(() => {
     if (
@@ -152,6 +150,7 @@ const ProductsForm = () => {
         form.setFieldsValue({
           ...productToEdit,
           manufacturerId: productToEdit.manufacturer.id,
+          expiryDate: dayjs(productToEdit.expiryDate),
         });
     }
   }, [products, manufacturers]);

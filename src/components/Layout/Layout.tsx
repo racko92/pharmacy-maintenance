@@ -20,7 +20,7 @@ const Layout = () => {
       key: 'products',
       label: 'Products',
       icon: <ProductOutlined />,
-      onClick: () => navigate('/product'),
+      onClick: () => navigate('/products'),
     },
     {
       key: 'about',
@@ -41,10 +41,10 @@ const Layout = () => {
           <Content>
             <Routes>
               <Route path="/" element={<Outlet />}>
-                <Route path="product/add" element={<ProductsForm />} />
-                <Route path="product" element={<Products />}></Route>
+                <Route path="products/add" element={<ProductsForm />} />
+                <Route path="products/edit/*" element={<ProductsForm />} />
+                <Route path="products" element={<Products />}></Route>
                 <Route path="about" element={<About />} />
-
                 <Route path="*" element={<>404</>} />
               </Route>
             </Routes>

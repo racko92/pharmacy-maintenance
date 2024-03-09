@@ -13,6 +13,10 @@ const Products = () => {
   const navigate = useNavigate();
   const { products } = useProducts();
 
+  const handleEditProperty = (product: IProduct) => {
+    navigate(`edit/${product.id}`);
+  };
+
   return (
     <List
       size="small"
@@ -35,7 +39,12 @@ const Products = () => {
           </span>
           <span>{product.manufacturer.name}</span>
           <div>
-            <Button type="primary" shape="circle" icon={<EditOutlined />} />
+            <Button
+              type="primary"
+              shape="circle"
+              icon={<EditOutlined />}
+              onClick={() => handleEditProperty(product)}
+            />
             <Button
               type="primary"
               danger

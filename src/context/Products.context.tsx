@@ -2,11 +2,13 @@ import React, { useContext, useState, createContext, useMemo } from 'react';
 import { v4 } from 'uuid';
 import { IProduct } from '../types/Product.types';
 import { IManufacturer } from '../types/Manufacturer.types';
+import dayjs from 'dayjs';
 
 export type IProductContext = {
   products: IProduct[];
   manufacturers: IManufacturer[];
-  setProducts: React.Dispatch<React.SetStateAction<IProduct[]>>;
+  addProduct: (product: IProduct) => void;
+  editProduct: (product: IProduct) => void;
 };
 
 const ProductsContext = createContext<IProductContext | null>(null);
@@ -16,7 +18,7 @@ export const useProducts = () => {
 
   if (!context) {
     throw new Error(
-      'useProductsContext must be used inside the ProductsContextProvider'
+      'useProductsContext must be used inside the ProductsProvider'
     );
   }
 
@@ -35,7 +37,7 @@ const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
         name: 'Best manufacturer',
       },
       price: 123,
-      expiryDate: new Date(),
+      expiryDate: dayjs(),
     },
     {
       id: v4(),
@@ -45,7 +47,7 @@ const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
         name: 'Best manufacturer',
       },
       price: 123,
-      expiryDate: new Date(),
+      expiryDate: dayjs(),
     },
   ]);
 
@@ -64,8 +66,27 @@ const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
     [products]
   );
 
+  const addProduct = (product: IProduct) => {
+    setProducts((prevState) => [...prevState, { ...product, id: v4() }]);
+  };
+
+  const editProduct = (product: IProduct) => {
+    setProducts((prevState) =>
+      prevState.map((prevProduct) =>
+        prevProduct.id === product.id ? product : prevProduct
+      )
+    );
+  };
+
   return (
-    <ProductsContext.Provider value={{ products, manufacturers, setProducts }}>
+    <ProductsContext.Provider
+      value={{
+        products,
+        manufacturers,
+        addProduct,
+        editProduct,
+      }}
+    >
       {children}
     </ProductsContext.Provider>
   );

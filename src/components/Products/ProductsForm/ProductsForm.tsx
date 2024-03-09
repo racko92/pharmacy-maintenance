@@ -1,118 +1,179 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useProducts } from '../../../context/Products.context';
+import { Button, Form, Input, InputNumber, Select, DatePicker } from 'antd';
 import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  Select,
-  Divider,
-  Space,
-  DatePicker,
-} from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+  IManufacturer,
+  INewManufacturer,
+} from '../../../types/Manufacturer.types';
+import { v4 } from 'uuid';
+import { useLocation, useNavigate } from 'react-router-dom';
+import ManufacturerSelectOption from '../../shared/ManufacturerSelectOption/ManufacturerSelectOption';
+import ManufacturerDropdown from '../../shared/ManufacturerDropdown/ManufacturerDropdown';
+import { IProduct, IProductForm } from '../../../types/Product.types';
+import styles from './ProductsForm.module.scss';
 
 const ProductsForm = () => {
-  const { products, manufacturers } = useProducts();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [form] = Form.useForm();
+  const values = Form.useWatch([], form);
+  const [manufacturerInput, setManufacturerInput] = React.useState<string>('');
+  const [newManufacturer, setNewManufacturer] =
+    React.useState<INewManufacturer>();
+  const { products, manufacturers, addProduct, editProduct } = useProducts();
+  const [submittable, setSubmittable] = React.useState<boolean>(false);
 
-  const onFinish = () => {
-    console.log('onFinish');
+  const manufacturersForSelect = React.useMemo(() => {
+    return manufacturers
+      .concat(newManufacturer ? [newManufacturer] : [])
+      .map((manufacturer) => ({
+        value: manufacturer.id,
+        label: manufacturer.name,
+      }));
+  }, [manufacturers, newManufacturer]);
+
+  const onFinish = (values: IProductForm) => {
+    const { manufacturerId, price, ...otherFields } = values;
+    const existingManufacturer: IManufacturer | undefined = manufacturers.find(
+      (manufacturer) => manufacturer.id === manufacturerId
+    );
+
+    const mappedManufacturer =
+      existingManufacturer ||
+      (newManufacturer && {
+        id: newManufacturer.id,
+        name: newManufacturer.name,
+      });
+
+    mappedManufacturer &&
+      (otherFields?.id
+        ? editProduct({
+            ...otherFields,
+            price: parseInt(price),
+            manufacturer: mappedManufacturer,
+          })
+        : addProduct({
+            ...otherFields,
+            price: parseInt(price),
+            manufacturer: mappedManufacturer,
+          }));
+    setNewManufacturer(undefined);
+
+    navigate('/products');
   };
-  const onFinishFailed = () => {
-    console.log('onFinishFailed');
+
+  const addManufacturer = () => {
+    setNewManufacturer({
+      id: v4(),
+      name: manufacturerInput,
+      shouldBeAdded: true,
+    });
+    setManufacturerInput('');
   };
 
-  useEffect(() => {
-    console.log(manufacturers);
-  }, [manufacturers]);
+  const renderFormFields = [
+    {
+      name: 'id',
+    },
+    {
+      label: 'Name',
+      name: 'name',
+      rules: [{ required: true, message: 'Product name is required', min: 3 }],
+      render: <Input className={styles.inputField} />,
+    },
+    {
+      label: 'Manufacturer',
+      name: 'manufacturerId',
+      rules: [{ required: true, message: 'Manufacturer is required' }],
+      render: (
+        <Select
+          className={styles.inputField}
+          options={manufacturersForSelect}
+          optionRender={(option) => (
+            <ManufacturerSelectOption
+              option={option}
+              newManufacturer={newManufacturer}
+              setNewManufacturer={setNewManufacturer}
+            />
+          )}
+          dropdownRender={(menu) => (
+            <ManufacturerDropdown
+              menu={menu}
+              newManufacturer={newManufacturer}
+              addManufacturer={addManufacturer}
+              manufacturerInput={manufacturerInput}
+              setManufacturerInput={setManufacturerInput}
+            />
+          )}
+        />
+      ),
+    },
+    {
+      label: 'Price',
+      name: 'price',
+      rules: [{ required: true, message: 'Price is required' }],
+      render: <InputNumber min="0" className={styles.inputField}></InputNumber>,
+    },
+    {
+      label: 'Expiry Date',
+      name: 'expiryDate',
+      rules: [{ required: true, message: 'Expiry date is required' }],
+      render: <DatePicker className={styles.inputField} format="DD.MM.YYYY" />,
+    },
+    {
+      name: 'submitButton',
+      render: (
+        <Button type="primary" htmlType="submit" disabled={submittable}>
+          Submit
+        </Button>
+      ),
+    },
+  ];
 
-  useEffect(() => {
-    console.log(products);
-  }, [products]);
+  React.useEffect(() => {
+    form
+      .validateFields({ validateOnly: true })
+      .then(() => setSubmittable(true))
+      .catch(() => setSubmittable(false));
+  }, [form, values]);
 
-  // id: string;
-  // name: string;
-  // manufacturer: IManufacturer;
-  // price: number;
-  // expiryDate: Date;
+  React.useEffect(() => {
+    if (
+      location.pathname.includes('/edit') &&
+      products?.length &&
+      manufacturers?.length
+    ) {
+      const productId = location.pathname.split('/').pop();
+      const productToEdit: IProduct | undefined = products.find(
+        (product) => product.id === productId
+      );
+
+      productToEdit &&
+        form.setFieldsValue({
+          ...productToEdit,
+          manufacturerId: productToEdit.manufacturer.id,
+        });
+    }
+  }, [products, manufacturers]);
 
   return (
     <Form
       name="basic"
-      // labelCol={{ span: 8 }}
-      // wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 600 }}
+      form={form}
       initialValues={{ remember: true }}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
-      <Form.Item
-        label="Name"
-        name="name"
-        rules={[
-          { required: true, message: 'Product name is required', min: 3 },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="Manufacturer"
-        name="manufacturer"
-        rules={[{ required: true, message: 'Manufacturer is required' }]}
-      >
-        <Select
-          options={manufacturers.map((manufacturer) => ({
-            label: manufacturer.name,
-            value: manufacturer.id,
-          }))}
-          dropdownRender={(menu) => (
-            <>
-              {menu}
-              <Divider style={{ margin: '8px 0' }} />
-              <Space style={{ padding: '0 8px 4px' }}>
-                <Input
-                  placeholder="Please enter item"
-                  // ref={inputRef}
-                  // value={name}
-                  // onChange={onNameChange}
-                  onKeyDown={(e) => e.stopPropagation()}
-                />
-                <Button
-                  type="text"
-                  icon={<PlusOutlined />}
-                  // onClick={addItem}
-                >
-                  Add item
-                </Button>
-              </Space>
-            </>
-          )}
-        />
-      </Form.Item>
-
-      <Form.Item
-        label="Price"
-        name="price"
-        rules={[{ required: true, message: 'Price is required' }]}
-      >
-        <InputNumber min="0" style={{ width: '100%' }}></InputNumber>
-      </Form.Item>
-
-      <Form.Item
-        label="Expiry Date"
-        name="expiryDate"
-        rules={[{ required: true, message: 'Expiry date is required' }]}
-      >
-        <DatePicker style={{ width: '100%' }} />
-      </Form.Item>
-
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
+      {renderFormFields.map((field) => (
+        <Form.Item
+          key={`${field.name}_field`}
+          label={field.label}
+          name={field.name}
+          rules={field.rules}
+        >
+          {field.render}
+        </Form.Item>
+      ))}
     </Form>
   );
 };

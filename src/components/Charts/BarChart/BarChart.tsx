@@ -14,6 +14,7 @@ const BarChart = () => {
     label: {
       formatter: (price: number) => `${price}€`,
       position: 'bottom',
+      fill: 'white',
     },
     legend: {
       color: {

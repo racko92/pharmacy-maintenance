@@ -85,26 +85,15 @@ const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const manufacturersByPrice = useMemo(
     () =>
-      products.reduce(
-        (acc: IManufacturer[], product: IProduct) =>
-          acc.find(
-            (manufacturer: IManufacturer) =>
-              manufacturer.id === product.manufacturer.id
-          )
-            ? acc.map((manufacturer) =>
-                manufacturer.id === product.manufacturer.id
-                  ? {
-                      ...manufacturer,
-                      priceSum: (manufacturer.priceSum || 0) + product.price,
-                    }
-                  : manufacturer
-              )
-            : acc.concat([
-                { ...product.manufacturer, priceSum: product.price },
-              ]),
-        []
-      ),
-    [products]
+      manufacturers.map((manufacturer: IManufacturer) => ({
+        ...manufacturer,
+        priceSum:
+          products
+            .filter((product) => product.manufacturer.id === manufacturer.id)
+            .map((product) => product.price)
+            .reduce((acc: number, price: number) => acc + price, 0) || 0,
+      })),
+    [manufacturers]
   );
 
   return (

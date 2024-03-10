@@ -5,3 +5,15 @@
 .select {
   text-align: left;
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  :global(.ant-form-item) {
+    width: 50%;
+  }
+  :global(.ant-form-item-row .ant-form-item-label) {
+    min-width: 25%;
+  }
+}

@@ -29,7 +29,7 @@ const PieChart = () => {
     tooltip: {
       field: 'priceSum',
       label: 'Products pricing sum by Manufacturer',
-      valueFormatter: (d: number) => `${d}Euro`,
+      valueFormatter: (d: number) => `${d}&euro;`,
     },
   };
 

@@ -11,6 +11,7 @@ interface IManufacturerDropdownProps {
   addManufacturer: () => void;
   manufacturerInput: string;
   setManufacturerInput: React.Dispatch<React.SetStateAction<string>>;
+  isDuplicate: boolean;
 }
 
 const ManufacturerDropdown = ({
@@ -19,19 +20,24 @@ const ManufacturerDropdown = ({
   addManufacturer,
   manufacturerInput,
   setManufacturerInput,
+  isDuplicate,
 }: IManufacturerDropdownProps) => (
   <>
     {menu}
     <Divider className={styles.divider} />
     {newManufacturer ? (
-      <ManufacturerAlert />
+      <ManufacturerAlert isDuplicate={false} />
     ) : (
-      <ManufacturerAddSection
-        newManufacturer={newManufacturer}
-        addManufacturer={addManufacturer}
-        manufacturerInput={manufacturerInput}
-        setManufacturerInput={setManufacturerInput}
-      />
+      <>
+        {isDuplicate && <ManufacturerAlert isDuplicate={isDuplicate} />}
+        <ManufacturerAddSection
+          newManufacturer={newManufacturer}
+          addManufacturer={addManufacturer}
+          manufacturerInput={manufacturerInput}
+          setManufacturerInput={setManufacturerInput}
+          isDuplicate={isDuplicate}
+        />
+      </>
     )}
   </>
 );

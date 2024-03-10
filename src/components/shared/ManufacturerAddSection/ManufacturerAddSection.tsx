@@ -9,6 +9,7 @@ interface IManufacturerAddSectionProps {
   addManufacturer: () => void;
   manufacturerInput: string;
   setManufacturerInput: React.Dispatch<React.SetStateAction<string>>;
+  isDuplicate: boolean;
 }
 
 const ManufacturerAddSection = ({
@@ -16,6 +17,7 @@ const ManufacturerAddSection = ({
   addManufacturer,
   manufacturerInput,
   setManufacturerInput,
+  isDuplicate,
 }: IManufacturerAddSectionProps) => (
   <Space className={styles.space}>
     <Input
@@ -28,7 +30,7 @@ const ManufacturerAddSection = ({
     <Button
       type="text"
       icon={<PlusOutlined />}
-      disabled={!manufacturerInput?.length || !!newManufacturer}
+      disabled={!manufacturerInput?.length || !!newManufacturer || isDuplicate}
       onClick={addManufacturer}
     >
       Add item

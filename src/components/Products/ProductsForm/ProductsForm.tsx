@@ -17,6 +17,7 @@ const ProductsForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const idValue = Form.useWatch('id', form);
   const [manufacturerInput, setManufacturerInput] = React.useState<string>('');
   const [newManufacturer, setNewManufacturer] =
     React.useState<INewManufacturer>();
@@ -30,6 +31,19 @@ const ProductsForm = () => {
         label: manufacturer.name,
       }));
   }, [manufacturers, newManufacturer]);
+
+  const isDuplicate = React.useMemo(
+    () =>
+      manufacturers
+        .map((manufacturer) => manufacturer.name.toLowerCase())
+        .includes(manufacturerInput.toLowerCase()),
+    [manufacturerInput]
+  );
+
+  const pageTitle = React.useMemo(
+    () => `${idValue ? 'Update' : 'Add new'} Product`,
+    [idValue]
+  );
 
   const onFinish = (values: IProductForm) => {
     const { manufacturerId, price, ...otherFields } = values;
@@ -76,7 +90,10 @@ const ProductsForm = () => {
     {
       label: 'Name',
       name: 'name',
-      rules: [{ required: true, message: 'Product name is required', min: 3 }],
+      rules: [
+        { required: true, message: 'Product name is required' },
+        { min: 3, message: 'Product name must be at least 3 characters long' },
+      ],
       render: <Input className={styles.inputField} />,
     },
     {
@@ -101,6 +118,7 @@ const ProductsForm = () => {
               addManufacturer={addManufacturer}
               manufacturerInput={manufacturerInput}
               setManufacturerInput={setManufacturerInput}
+              isDuplicate={isDuplicate}
             />
           )}
         />
@@ -110,7 +128,13 @@ const ProductsForm = () => {
       label: 'Price',
       name: 'price',
       rules: [{ required: true, message: 'Price is required' }],
-      render: <InputNumber min="0" className={styles.inputField}></InputNumber>,
+      render: (
+        <InputNumber
+          min="0"
+          className={styles.inputField}
+          addonAfter="&euro;"
+        />
+      ),
     },
     {
       label: 'Expiry Date',
@@ -120,7 +144,7 @@ const ProductsForm = () => {
         <DatePicker
           className={styles.inputField}
           format="DD.MM.YYYY"
-          disabledDate={(current) => current < dayjs().endOf('day')}
+          disabledDate={(current) => current.isBefore(dayjs(), 'day')}
         />
       ),
     },
@@ -155,24 +179,28 @@ const ProductsForm = () => {
   }, [products, manufacturers]);
 
   return (
-    <Form
-      name="basic"
-      form={form}
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-      autoComplete="off"
-    >
-      {renderFormFields.map((field) => (
-        <Form.Item
-          key={`${field.name}_field`}
-          label={field.label}
-          name={field.name}
-          rules={field.rules}
-        >
-          {field.render}
-        </Form.Item>
-      ))}
-    </Form>
+    <>
+      <h2>{pageTitle}</h2>
+      <Form
+        name="basic"
+        className={styles.form}
+        form={form}
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        autoComplete="off"
+      >
+        {renderFormFields.map((field) => (
+          <Form.Item
+            key={`${field.name}_field`}
+            label={field.label}
+            name={field.name}
+            rules={field.rules}
+          >
+            {field.render}
+          </Form.Item>
+        ))}
+      </Form>
+    </>
   );
 };
 

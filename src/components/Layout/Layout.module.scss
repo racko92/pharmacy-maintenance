@@ -5,3 +5,17 @@
 .footer {
   text-align: center;
 }
+
+.homeIconWrapper {
+  width: 100%;
+  padding: 5px;
+  display: flex;
+  fill: white;
+  align-items: center;
+  justify-content: center;
+}
+
+.homeIcon {
+  font-size: 50px;
+  cursor: pointer;
+}

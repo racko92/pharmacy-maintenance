@@ -6,6 +6,7 @@ import {
   AreaChartOutlined,
   BarChartOutlined,
   PieChartOutlined,
+  ExperimentTwoTone,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import {
@@ -75,6 +76,12 @@ const Layout = () => {
   return (
     <AntdLayoutComponent className={styles.layout}>
       <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
+        <div className={styles.homeIconWrapper}>
+          <ExperimentTwoTone
+            className={styles.homeIcon}
+            onClick={() => navigate('/')}
+          />
+        </div>
         <Menu
           theme="dark"
           mode="inline"
@@ -88,6 +95,10 @@ const Layout = () => {
           <ProductsProvider>
             <Routes>
               <Route path="/" element={<Outlet />}>
+                <Route
+                  index
+                  element={<h2>Welcome to Pharmacy management app</h2>}
+                />
                 <Route path="products/add" element={<ProductsForm />} />
                 <Route path="products/edit/*" element={<ProductsForm />} />
                 <Route path="products" element={<Products />} />

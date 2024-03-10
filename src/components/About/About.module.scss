@@ -1,0 +1,10 @@
+.pageWrapper {
+  overflow-y: auto;
+  max-height: calc(100vh - 132px);
+  width: 100%;
+}
+
+.textWrapper {
+  text-align: left;
+  padding: 20px;
+}

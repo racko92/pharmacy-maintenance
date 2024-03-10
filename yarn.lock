@@ -25,17 +25,22 @@
     "@jridgewell/gen-mapping" "^0.3.5"
     "@jridgewell/trace-mapping" "^0.3.24"
 
+"@ant-design/charts-util@0.0.1-alpha.0":
+  version "0.0.1-alpha.0"
+  resolved "https://registry.yarnpkg.com/@ant-design/charts-util/-/charts-util-0.0.1-alpha.0.tgz#99710ee981f045eec1dc73dd9037f81712ec918d"
+  integrity sha512-ggaeLhENcOa37Cx+81+IiQ6X9yc/DJFkM/vQ4u+5JXJheR7Sm1YlTjyAc24aO7WqFf7pbdSewDLMBXyYyI1/5Q==
+
 "@ant-design/charts-util@0.0.1-alpha.5":
   version "0.0.1-alpha.5"
   resolved "https://registry.yarnpkg.com/@ant-design/charts-util/-/charts-util-0.0.1-alpha.5.tgz#bb8ab113194f0ffeddb688d54bfd63d6f0007fb7"
   integrity sha512-EwTUjRPhU2CUyI2e11pAi9aOQg9oEWdFEWxv1f4j+Ta4doYXd1yTl94Zy9JvigiEj4qv8dPGl0PUd3r+qMVrAg==
 
-"@ant-design/charts@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@ant-design/charts/-/charts-2.0.3.tgz#552648d8dd663b052e0c2425699825b7957dfb25"
-  integrity sha512-CDyDRoMLtUcZ6ZU92nmW23Yt9a9KJU3Z/i5RPMasDuBMShTPNY3i/sOQgv5nTho+7FfBMVrdAax+cKAYcAz3jQ==
+"@ant-design/charts@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@ant-design/charts/-/charts-2.0.1.tgz#dde092853fb25961829753c45719e6f448b80fc3"
+  integrity sha512-biDz5UO2TkBWmaxUayFJgxHQZ5Ckc5ZPAHEh4ic5pbKffZlISgvGd5cNd7yJsalsiiQ30vIl60yrXfkJ+hqr/g==
   dependencies:
-    "@ant-design/plots" "^2.1.3"
+    "@ant-design/plots" "2.0.0"
 
 "@ant-design/colors@^7.0.0", "@ant-design/colors@^7.0.2":
   version "7.0.2"
@@ -73,14 +78,23 @@
     classnames "^2.2.6"
     rc-util "^5.31.1"
 
-"@ant-design/plots@^2.1.3":
-  version "2.1.14"
-  resolved "https://registry.yarnpkg.com/@ant-design/plots/-/plots-2.1.14.tgz#967a6fbf3e86ad216026fdbb853af1391549c795"
-  integrity sha512-ZFhvlNUsPcvD8d+nX4bXA9djbEUDVfKm8/xvFplffWT68rWM37d32qI7EghSvLUreszqh60DZAy80wCA08lgoQ==
+"@ant-design/plots@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@ant-design/plots/-/plots-2.0.0.tgz#7bf9f25fe5c8879b95ea56dec714a5b1bf35b4ec"
+  integrity sha512-1SCrnQ7+BTgyWzzWaCEE6T/J6/PEzjL/UJMqv6eqahporD9q8kpun71ut+/rzf0kQHMgfgxshXC1Bv2l44Iv5w==
+  dependencies:
+    "@ant-design/charts-util" "0.0.1-alpha.0"
+    "@antv/event-emitter" "^0.1.3"
+    "@antv/g2" "^5.1.9"
+    size-sensor "^1.0.1"
+
+"@ant-design/plots@2.1.13":
+  version "2.1.13"
+  resolved "https://registry.yarnpkg.com/@ant-design/plots/-/plots-2.1.13.tgz#ca206885760aa430bdccde947c18d072c0a8adbd"
+  integrity sha512-HX0AONkl8UWHwFaqc9nJsxD2+drvbLKVHdFVuf/8mBAKSumLwCyykn1NysaH/BgTfXSJ2k2NxwDD40U8CQg6lQ==
   dependencies:
     "@ant-design/charts-util" "0.0.1-alpha.5"
     "@antv/event-emitter" "^0.1.3"
-    "@antv/g" "^5.18.24"
     "@antv/g2" "^5.1.9"
     "@antv/g2-extension-plot" "^0.1.1"
 
@@ -294,7 +308,7 @@
     fmin "^0.0.2"
     pdfast "^0.2.0"
 
-"@antv/g@^5.18.19", "@antv/g@^5.18.24", "@antv/g@^5.18.6":
+"@antv/g@^5.18.19", "@antv/g@^5.18.6":
   version "5.18.25"
   resolved "https://registry.yarnpkg.com/@antv/g/-/g-5.18.25.tgz#ba0062d7e33f4dab93067fc74cc091715f617b6e"
   integrity sha512-KZyOBIuJ4BoRi/rYERE86QdHMFH75XyC/9yRjDzEoiB1SYWqL+z+0VuaCR7/pqHW1d1SHq/nnjawHe7MMiWKLA==
@@ -1976,11 +1990,11 @@
     "@ljharb/through" "^2.3.9"
 
 "@ljharb/through@^2.3.9", "@ljharb/through@~2.3.9":
-  version "2.3.12"
-  resolved "https://registry.yarnpkg.com/@ljharb/through/-/through-2.3.12.tgz#c418c43060eee193adce48b15c2206096a28e9ea"
-  integrity sha512-ajo/heTlG3QgC8EGP6APIejksVAYt4ayz4tqoP3MolFELzcH1x1fzwEYRJTPO0IELutZ5HQ0c26/GqAYy79u3g==
+  version "2.3.13"
+  resolved "https://registry.yarnpkg.com/@ljharb/through/-/through-2.3.13.tgz#b7e4766e0b65aa82e529be945ab078de79874edc"
+  integrity sha512-/gKJun8NNiWGZJkGzI/Ragc53cOdcLNdzjLaIa+GEjguQs0ulsurx8WN0jijdK9yPqDvziX995sMRLyLt1uZMQ==
   dependencies:
-    call-bind "^1.0.5"
+    call-bind "^1.0.7"
 
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
@@ -9895,6 +9909,11 @@ sisteransi@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/sisteransi/-/sisteransi-1.0.5.tgz#134d681297756437cc05ca01370d3a7a571075ed"
   integrity sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==
+
+size-sensor@^1.0.1:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/size-sensor/-/size-sensor-1.0.2.tgz#b8f8da029683cf2b4e22f12bf8b8f0a1145e8471"
+  integrity sha512-2NCmWxY7A9pYKGXNBfteo4hy14gWu47rg5692peVMst6lQLPKrVjhY+UTEsPI5ceFRJSl3gVgMYaUi/hKuaiKw==
 
 slash@^3.0.0:
   version "3.0.0"

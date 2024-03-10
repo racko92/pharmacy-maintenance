@@ -23,7 +23,7 @@ export const products: IProduct[] = [
   },
   {
     id: 'd7154a0d-9db6-49e9-be5f-6cef872df178',
-    name: 'quis',
+    name: 'quis2',
     manufacturer: {
       id: 'ae8b0191-8b78-4fc0-ba30-691a73e58c6b',
       name: 'ZAPPIX',
@@ -63,7 +63,7 @@ export const products: IProduct[] = [
   },
   {
     id: 'fe277a72-0d2f-44c2-8363-0ea1d2d1c75e',
-    name: 'est',
+    name: 'este',
     manufacturer: {
       id: 'ae8b0191-8b78-4fc0-ba30-691a73e58c6b',
       name: 'ZAPPIX',
@@ -158,7 +158,7 @@ export const products: IProduct[] = [
       id: '60dcb217-2601-40e6-92aa-fb4cf932cc5b',
       name: 'NETUR',
     },
-    price: 1,
+    price: 9,
     expiryDate: new Date('2023-09-17'),
   },
 ];

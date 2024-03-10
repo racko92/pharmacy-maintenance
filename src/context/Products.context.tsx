@@ -10,6 +10,7 @@ export type IProductContext = {
   addProduct: (product: IProduct) => void;
   editProduct: (product: IProduct) => void;
   deleteProduct: (product: IProduct) => void;
+  manufacturersByPrice: IManufacturer[];
 };
 
 const ProductsContext = createContext<IProductContext | null>(null);
@@ -61,6 +62,28 @@ const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
       prevState.filter((prevProduct) => prevProduct.id !== product.id)
     );
 
+  const manufacturersByPrice = useMemo(
+    () =>
+      products.reduce((acc: IManufacturer[], product: IProduct) => {
+        const foundManufacturer: IManufacturer | undefined = acc.find(
+          (manufacturer: IManufacturer) =>
+            manufacturer.id === product.manufacturer.id
+        );
+
+        return foundManufacturer
+          ? acc.map((manufacturer) =>
+              manufacturer.id === product.manufacturer.id
+                ? {
+                    ...manufacturer,
+                    priceSum: (manufacturer.priceSum || 0) + product.price,
+                  }
+                : manufacturer
+            )
+          : acc.concat([{ ...product.manufacturer, priceSum: product.price }]);
+      }, []),
+    [products]
+  );
+
   return (
     <ProductsContext.Provider
       value={{
@@ -69,6 +92,7 @@ const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
         addProduct,
         editProduct,
         deleteProduct,
+        manufacturersByPrice,
       }}
     >
       {children}

@@ -65,7 +65,6 @@ const ProductsForm = () => {
     setNewManufacturer({
       id: v4(),
       name: manufacturerInput,
-      shouldBeAdded: true,
     });
     setManufacturerInput('');
   };

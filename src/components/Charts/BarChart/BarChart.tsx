@@ -1,39 +1,43 @@
 import React from 'react';
 import { Column } from '@ant-design/plots';
 import { useProducts } from '../../../context/Products.context';
+import styles from '../Charts.module.scss';
 
 const BarChart = () => {
-  const { products } = useProducts();
+  const { cheapestAndPriciestProducts } = useProducts();
 
   const config = {
-    data: products,
+    data: cheapestAndPriciestProducts,
     xField: 'name',
     yField: 'price',
+    colorField: 'name',
     label: {
-      // 可手动配置 label 数据标签位置
+      formatter: (price: number) => `${price}€`,
       position: 'bottom',
-      // 'top', 'bottom', 'middle',
-      // 配置样式
-      // style: {
-      //   fill: '#FFFFFF',
-      //   opacity: 0.6,
-      // },
     },
-
+    legend: {
+      color: {
+        position: 'bottom',
+        rowPadding: 15,
+        layout: {
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+        },
+      },
+    },
     axis: {
       y: { title: 'Product price' },
       x: { title: 'Manufacturers name' },
     },
-    meta: {
-      type: {
-        alias: 'test',
-      },
-      sales: {
-        alias: 'asdf',
-      },
-    },
+    tooltip: false,
   };
-  return <Column {...config} />;
+  return (
+    <div className={styles.graphWrapper}>
+      <h2>Five most and five least expensive products</h2>
+      <Column {...config} />
+    </div>
+  );
 };
 
 export default BarChart;

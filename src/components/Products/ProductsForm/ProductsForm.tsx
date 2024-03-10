@@ -129,11 +129,7 @@ const ProductsForm = () => {
       name: 'price',
       rules: [{ required: true, message: 'Price is required' }],
       render: (
-        <InputNumber
-          min="0"
-          className={styles.inputField}
-          addonAfter="&euro;"
-        />
+        <InputNumber min="0" className={styles.inputField} addonAfter="€" />
       ),
     },
     {

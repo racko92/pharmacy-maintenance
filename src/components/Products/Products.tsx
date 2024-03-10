@@ -37,6 +37,11 @@ const Products = () => {
     </p>
   );
 
+  const handleProductDeletion = () => {
+    productForDeletion && deleteProduct(productForDeletion);
+    setProductForDeletion(undefined);
+  };
+
   return (
     <div>
       <List
@@ -70,7 +75,7 @@ const Products = () => {
             <span className={styles.itemWrapper}>
               {product.manufacturer.name}
             </span>
-            <span className={styles.itemWrapper}>{product.price}&euro;</span>
+            <span className={styles.itemWrapper}>{product.price}€</span>
             <span
               className={`${styles.itemWrapper} ${dayjs(product.expiryDate).isBefore(dayjs()) && styles.pastDate}`}
             >
@@ -98,7 +103,7 @@ const Products = () => {
         isModalOpen={!!productForDeletion}
         title="Delete product?"
         content={deletionModalContent()}
-        handleOk={() => productForDeletion && deleteProduct(productForDeletion)}
+        handleOk={handleProductDeletion}
         handleCancel={() => setProductForDeletion(undefined)}
       />
     </div>

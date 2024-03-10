@@ -11,6 +11,7 @@ export type IProductContext = {
   editProduct: (product: IProduct) => void;
   deleteProduct: (product: IProduct) => void;
   manufacturersByPrice: IManufacturer[];
+  cheapestAndPriciestProducts: IProduct[];
 };
 
 const ProductsContext = createContext<IProductContext | null>(null);
@@ -62,25 +63,47 @@ const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
       prevState.filter((prevProduct) => prevProduct.id !== product.id)
     );
 
+  const cheapestAndPriciestProducts: IProduct[] = useMemo(() => {
+    if (products?.length <= 10) return products;
+    const clone: IProduct[] = structuredClone(products);
+    const sortedFromHighestToLowestPrice = clone.sort(
+      (a, b) => b.price - a.price
+    );
+    const lastIndex = sortedFromHighestToLowestPrice.length - 1;
+    const highest = sortedFromHighestToLowestPrice.slice(0, 5);
+    const lowest = sortedFromHighestToLowestPrice.slice(
+      lastIndex - 5,
+      lastIndex
+    );
+
+    const mergedHighestAndLowest = highest.concat(lowest);
+
+    return products.filter((product) =>
+      mergedHighestAndLowest.find((merged) => merged.id === product.id)
+    );
+  }, [products]);
+
   const manufacturersByPrice = useMemo(
     () =>
-      products.reduce((acc: IManufacturer[], product: IProduct) => {
-        const foundManufacturer: IManufacturer | undefined = acc.find(
-          (manufacturer: IManufacturer) =>
-            manufacturer.id === product.manufacturer.id
-        );
-
-        return foundManufacturer
-          ? acc.map((manufacturer) =>
+      products.reduce(
+        (acc: IManufacturer[], product: IProduct) =>
+          acc.find(
+            (manufacturer: IManufacturer) =>
               manufacturer.id === product.manufacturer.id
-                ? {
-                    ...manufacturer,
-                    priceSum: (manufacturer.priceSum || 0) + product.price,
-                  }
-                : manufacturer
-            )
-          : acc.concat([{ ...product.manufacturer, priceSum: product.price }]);
-      }, []),
+          )
+            ? acc.map((manufacturer) =>
+                manufacturer.id === product.manufacturer.id
+                  ? {
+                      ...manufacturer,
+                      priceSum: (manufacturer.priceSum || 0) + product.price,
+                    }
+                  : manufacturer
+              )
+            : acc.concat([
+                { ...product.manufacturer, priceSum: product.price },
+              ]),
+        []
+      ),
     [products]
   );
 
@@ -93,6 +116,7 @@ const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({
         editProduct,
         deleteProduct,
         manufacturersByPrice,
+        cheapestAndPriciestProducts,
       }}
     >
       {children}

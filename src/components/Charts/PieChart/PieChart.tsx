@@ -1,39 +1,40 @@
 import React from 'react';
 import { Pie } from '@ant-design/plots';
 import { useProducts } from '../../../context/Products.context';
+import styles from '../Charts.module.scss';
 
 const PieChart = () => {
   const { manufacturersByPrice } = useProducts();
-
-  // React.useEffect(() => {
-  //   console.log(manufacturersByPrice);
-  // }, [manufacturersByPrice]);
 
   const config = {
     data: manufacturersByPrice,
     angleField: 'priceSum',
     colorField: 'name',
     label: {
-      text: 'name',
-      style: {
-        fontWeight: 'bold',
+      text: 'priceSum',
+      position: 'outside',
+      formatter: (d: number) => `${d}€`,
+    },
+    legend: {
+      color: {
+        position: 'bottom',
+        rowPadding: 15,
+        layout: {
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+        },
       },
     },
-    // legend: {
-    //   color: {
-    //     title: false,
-    //     position: 'left',
-    //     rowPadding: 15,
-    //   },
-    // },
-    tooltip: {
-      field: 'priceSum',
-      label: 'Products pricing sum by Manufacturer',
-      valueFormatter: (d: number) => `${d}&euro;`,
-    },
+    tooltip: false,
   };
 
-  return <Pie {...config} />;
+  return (
+    <div className={styles.graphWrapper}>
+      <h2>Sum of all product prices by manufacturer</h2>
+      <Pie {...config} />
+    </div>
+  );
 };
 
 export default PieChart;
